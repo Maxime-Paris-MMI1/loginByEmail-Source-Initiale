@@ -29,8 +29,8 @@ import { SupabaseAuthClient } from '@supabase/supabase-js/dist/module/lib/Supaba
 
 <script>
 
-const SUPABASE_URL = 'YOUR_SUPABASE_URL'
-const SUPABASE_KEY = 'YOUR_ANON_KEY'
+const SUPABASE_URL = 'https://uhmqfemdcmbttlvjjpkb.supabase.co'
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVobXFmZW1kY21idHRsdmpqcGtiIiwicm9sZSI6ImFub24iLCJpYXQiOjE2NjMzMzY3ODAsImV4cCI6MTk3ODkxMjc4MH0.QCcYMCA56MFH-SOhU0VGxirWBhcxsc7ajQoue43hFdA'
 const supabase = createClient(SUPABASE_URL, SUPABASE_KEY)
 
 
@@ -39,14 +39,34 @@ export default {
     //this method allows a new user to sign up the system. Once done, the user receives an email
     //asking for account validation. Once the validation made the user is added to the system
     async register(){
-      
+      try { 
+        const { user, session, error } = await supabase.auth.signUp({ 
+          email: this.email, 
+          password: this.passwd, 
+        }); 
+        if (error) throw error; 
+        document.getElementById('status').innerHTML='Please validate the received email !' 
+      } 
+      catch (error) { 
+        alert(error.error_description || error.message); 
+      }  
+    },
     },
     //this method allows the already registred user to log in the system.
     async login(){
-       
+      try { 
+        const { user, session, error } = await supabase.auth.signIn({ 
+          email: this.email, 
+          password: this.passwd, 
+        }); 
+        if (error) throw error; 
+        document.getElementById('status').innerHTML='You are now logged !' 
+      } catch (error) { 
+        alert(error.error_description || error.message); 
+      }  
     }
-  }  
-}
+} 
+
 </script>
 
 <style>
